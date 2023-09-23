@@ -1,9 +1,4 @@
 using APS8_CSHARP_API.Configurations;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 
 namespace APS8_CSHARP_API
 {
@@ -13,6 +8,7 @@ namespace APS8_CSHARP_API
         {
             services.AddControllers();
             services.AddSwaggerConfiguration();
+            services.AddCorsConfiguration();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -25,6 +21,7 @@ namespace APS8_CSHARP_API
             app.UseAuthorization();
             app.UseSwaggerConfiguration();
             app.UseRouting();
+            app.UseCors("CorsPolicy");
 
             app.UseEndpoints(endpoints =>
             {
