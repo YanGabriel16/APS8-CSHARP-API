@@ -1,11 +1,19 @@
+using APS8_CSHARP_API.Api.Configurations;
 using APS8_CSHARP_API.Configurations;
 
 namespace APS8_CSHARP_API
 {
     public class Startup
     {
+        public IConfiguration Configuration { get; }
+        public Startup(IConfiguration configuration)
+        {
+            Configuration = configuration;
+        }
+
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDataBaseConfiguration(Configuration);
             services.AddControllers();
             services.AddCorsConfiguration();
             services.AddSwaggerConfiguration();
