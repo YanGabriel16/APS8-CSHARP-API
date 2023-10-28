@@ -1,6 +1,6 @@
 ﻿using APS8_CSHARP_API.Domain.Interfaces;
+using APS8_CSHARP_API.Domain.Objects;
 using Newtonsoft.Json;
-using System.Net.Http;
 
 namespace APS8_CSHARP_API.Infra.Service
 {
@@ -22,7 +22,7 @@ namespace APS8_CSHARP_API.Infra.Service
             _httpClient.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
         }
 
-        public async Task<string> GetWeatherForecast(decimal lat, decimal lon)
+        public async Task<OpenWeatherResponse> GetWeatherForecast(decimal lat, decimal lon)
         {
             string resultado = string.Empty;
 
@@ -44,7 +44,7 @@ namespace APS8_CSHARP_API.Infra.Service
                 resultado = $"Ocorreu um erro: {ex.Message}";
             }
 
-            return resultado;
+            return JsonConvert.DeserializeObject<OpenWeatherResponse>(resultado) ?? new OpenWeatherResponse();
         }
     }
 }

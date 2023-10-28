@@ -1,7 +1,9 @@
-﻿namespace APS8_CSHARP_API.Domain.Interfaces
+﻿using APS8_CSHARP_API.Domain.Objects;
+
+namespace APS8_CSHARP_API.Domain.Interfaces
 {
     public interface IOpenWeatherService
     {
-        Task<string> GetWeatherForecast(decimal lat, decimal lon);
+        Task<OpenWeatherResponse> GetWeatherForecast(decimal lat, decimal lon);
     }
 }
