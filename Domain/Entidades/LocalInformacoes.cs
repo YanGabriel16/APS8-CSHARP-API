@@ -9,6 +9,5 @@ namespace APS8_CSHARP_API.Domain.Entidades
         
         [ForeignKey("LocalId")]
         public int LocalId { get; set; }
-        public virtual Local Local { get; set; }
     }
 }

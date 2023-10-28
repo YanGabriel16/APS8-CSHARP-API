@@ -13,12 +13,11 @@ namespace APS8_CSHARP_API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDataBaseConfiguration();
+            services.AddServicesConfiguration();
             services.AddControllers();
             services.AddCorsConfiguration();
             services.AddHangfireConfiguration();
             services.AddSwaggerConfiguration();
-            services.AddServicesConfiguration();
-            services.AddRepositoryConfiguration();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

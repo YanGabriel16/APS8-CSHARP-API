@@ -4,6 +4,5 @@ namespace APS8_CSHARP_API.Domain.Interfaces.Repository
     {
         void Add(T entity);
         void Update(T entity);
-        void SaveChanges();
     }
 }
