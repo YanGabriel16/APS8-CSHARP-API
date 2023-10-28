@@ -60,13 +60,27 @@ namespace APS8_CSHARP_API.Api.Controllers
             return Ok();
         }
 
+        [HttpPost("{id}")]
+        public async Task<IActionResult> UpdateLocal(int id, EditarLocalRequest request)
+        {
+            var local = await _unitfOfWork.LocalRepository.GetLocal(id);
+            if (local == null) return BadRequest();
+
+            local.Nome = request.Nome;
+
+            _unitfOfWork.LocalRepository.Update(local);
+            await _unitfOfWork.Commit();
+
+            return Ok();
+        }
+
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteLocal(int id)
         {
             var result = await _unitfOfWork.LocalRepository.Delete(id);
             await _unitfOfWork.Commit();
 
-            if(result == false) return BadRequest();
+            if (result == false) return BadRequest();
 
             return Ok();
         }
