@@ -9,44 +9,44 @@ namespace APS8_CSHARP_API.Domain.Objects
 
     public class Index
     {
-        public string Code { get; set; }
-        public string DisplayName { get; set; }
+        public string Code { get; set; } = string.Empty;
+        public string DisplayName { get; set; } = string.Empty;
         public int Aqi { get; set; }
-        public string AqiDisplay { get; set; }
-        public Color Color { get; set; }
-        public string Category { get; set; }
-        public string DominantPollutant { get; set; }
+        public string AqiDisplay { get; set; } = string.Empty;
+        public Color Color { get; set; } = new();
+        public string Category { get; set; } = string.Empty;
+        public string DominantPollutant { get; set; } = string.Empty;
     }
 
     public class Concentration
     {
         public double Value { get; set; }
-        public string Units { get; set; }
+        public string Units { get; set; } = string.Empty;
     }
 
     public class AdditionalInfo
     {
-        public string Sources { get; set; }
-        public string Effects { get; set; }
+        public string Sources { get; set; } = string.Empty;
+        public string Effects { get; set; } = string.Empty;
     }
 
     public class Pollutant
     {
-        public string Code { get; set; }
-        public string DisplayName { get; set; }
-        public string FullName { get; set; }
-        public Concentration Concentration { get; set; }
-        public AdditionalInfo AdditionalInfo { get; set; }
+        public string Code { get; set; } = string.Empty;
+        public string DisplayName { get; set; } = string.Empty;
+        public string FullName { get; set; } = string.Empty;
+        public Concentration Concentration { get; set; } = new();
+        public AdditionalInfo AdditionalInfo { get; set; } = new();
     }
 
     public class HealthRecommendations
     {
-        public string GeneralPopulation { get; set; }
-        public string Elderly { get; set; }
-        public string LungDiseasePopulation { get; set; }
-        public string HeartDiseasePopulation { get; set; }
-        public string Athletes { get; set; }
-        public string PregnantWomen { get; set; }
-        public string Children { get; set; }
+        public string GeneralPopulation { get; set; } = string.Empty;
+        public string Elderly { get; set; } = string.Empty;
+        public string LungDiseasePopulation { get; set; } = string.Empty;
+        public string HeartDiseasePopulation { get; set; } = string.Empty;
+        public string Athletes { get; set; } = string.Empty;
+        public string PregnantWomen { get; set; } = string.Empty;
+        public string Children { get; set; } = string.Empty;
     }
 }

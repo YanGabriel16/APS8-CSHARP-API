@@ -12,7 +12,7 @@ namespace APS8_CSHARP_API.Api.Configurations
     {
         public static void AddDataBaseConfiguration(this IServiceCollection services)
         {
-            services.AddDbContext<ApplicationDbContext>(options =>
+            services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlServer(Constants.ConnectionString));
         }
     }

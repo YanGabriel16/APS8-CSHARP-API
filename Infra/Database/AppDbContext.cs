@@ -6,6 +6,7 @@ namespace APS8_CSHARP_API.Infra.Database
     public class AppDbContext : DbContext
     {
         public DbSet<Local> Locais { get; set; }
+        public DbSet<LocalInformacoes> LocalInformacoes { get; set; }
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
     }
 }
