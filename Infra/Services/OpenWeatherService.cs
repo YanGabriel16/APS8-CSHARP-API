@@ -7,7 +7,7 @@ namespace APS8_CSHARP_API.Infra.Service
     public class OpenWeatherService : IOpenWeatherService
     {
         private readonly HttpClient _httpClient;
-        private readonly string _apiKey;
+        private readonly string _apiKey = "19e3ab596360c623819a6373f48c995a";
 
         public OpenWeatherService()
         {
@@ -15,7 +15,6 @@ namespace APS8_CSHARP_API.Infra.Service
             builder.Path = "/data/2.5/";
             string url = builder.ToString();
 
-            _apiKey = "19e3ab596360c623819a6373f48c995a";
             _httpClient = new HttpClient();
             _httpClient.BaseAddress = new Uri(url);
             _httpClient.DefaultRequestHeaders.Accept.Clear();
