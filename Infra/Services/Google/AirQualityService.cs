@@ -8,24 +8,22 @@ namespace APS8_CSHARP_API.Infra.Services.Google
     public class AirQualityService : IAirQualityService
     {
         private readonly HttpClient _httpClient;
-        private readonly string _apiKey = "AIzaSyDX2Kjl6MYhu7y8x9WQiEmD_1F2W5s3OhE";
+        private readonly string ApiKey = "AIzaSyDX2Kjl6MYhu7y8x9WQiEmD_1F2W5s3OhE";
 
         public AirQualityService()
-        {
-            _httpClient = new HttpClient();
-        }
+            => _httpClient = new HttpClient();
 
         public async Task<AirQualityResponse> GetQualidadeAr(decimal latitude, decimal longitude)
         {
-            string apiUrl = $"https://airquality.googleapis.com/v1/currentConditions:lookup?key={_apiKey}";
+            string apiUrl = $"https://airquality.googleapis.com/v1/currentConditions:lookup?key={ApiKey}";
 
             var request = new
             {
                 universalAqi = true,
                 location = new
                 {
-                    latitude = latitude,
-                    longitude = longitude
+                    latitude,
+                    longitude
                 },
                 extraComputations = new[]
                 {

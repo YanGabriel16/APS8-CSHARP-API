@@ -1,4 +1,5 @@
-﻿using APS8_CSHARP_API.Domain.Interfaces;
+﻿using System.Net.Http.Headers;
+using APS8_CSHARP_API.Domain.Interfaces;
 using APS8_CSHARP_API.Domain.Objects;
 using Newtonsoft.Json;
 
@@ -11,39 +12,32 @@ namespace APS8_CSHARP_API.Infra.Services
 
         public OpenWeatherService()
         {
-            UriBuilder builder = new UriBuilder("https://api.openweathermap.org");
-            builder.Path = "/data/2.5/";
-            string url = builder.ToString();
-
-            _httpClient = new HttpClient();
-            _httpClient.BaseAddress = new Uri(url);
+            UriBuilder builder = new("https://api.openweathermap.org") { Path = "/data/2.5/" };
+            _httpClient = new HttpClient { BaseAddress = new Uri(builder.ToString()) };
             _httpClient.DefaultRequestHeaders.Accept.Clear();
-            _httpClient.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+            _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         }
 
         public async Task<OpenWeatherResponse> GetWeatherForecast(decimal lat, decimal lon)
         {
-            string resultado = string.Empty;
-
             try
             {
-                HttpResponseMessage response = await _httpClient.GetAsync($"forecast?lat={lat}&lon={lon}&appid={_apiKey}&lang=pt_br&cnt=1"); // Insira o caminho do endpoint da API de destino aqui
+                HttpResponseMessage response = await _httpClient.GetAsync($"forecast?lat={lat}&lon={lon}&appid={_apiKey}&lang=pt_br&cnt=1");
 
                 if (response.IsSuccessStatusCode)
                 {
-                    resultado = await response.Content.ReadAsStringAsync();
+                    var responseContent = await response.Content.ReadAsStringAsync();
+                    return JsonConvert.DeserializeObject<OpenWeatherResponse>(responseContent) ?? new OpenWeatherResponse();
                 }
                 else
                 {
-                    resultado = $"Erro na requisição: {response.StatusCode}";
+                    throw new Exception($"Erro na requisição: {response.StatusCode}");
                 }
             }
             catch (Exception ex)
             {
-                resultado = $"Ocorreu um erro: {ex.Message}";
+                throw new Exception($"Ocorreu um erro na requisição: {ex.Message}");
             }
-
-            return JsonConvert.DeserializeObject<OpenWeatherResponse>(resultado) ?? new OpenWeatherResponse();
         }
     }
 }
