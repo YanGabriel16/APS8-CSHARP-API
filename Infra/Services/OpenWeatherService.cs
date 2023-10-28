@@ -2,7 +2,7 @@
 using APS8_CSHARP_API.Domain.Objects;
 using Newtonsoft.Json;
 
-namespace APS8_CSHARP_API.Infra.Service
+namespace APS8_CSHARP_API.Infra.Services
 {
     public class OpenWeatherService : IOpenWeatherService
     {

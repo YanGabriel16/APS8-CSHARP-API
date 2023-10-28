@@ -1,5 +1,6 @@
 using APS8_CSHARP_API.Api.Configurations;
 using APS8_CSHARP_API.Configurations;
+using Hangfire;
 
 namespace APS8_CSHARP_API
 {
@@ -7,15 +8,14 @@ namespace APS8_CSHARP_API
     {
         public IConfiguration Configuration { get; }
         public Startup(IConfiguration configuration)
-        {
-            Configuration = configuration;
-        }
-
+            => Configuration = configuration;
+        
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDataBaseConfiguration(Configuration);
+            services.AddDataBaseConfiguration();
             services.AddControllers();
             services.AddCorsConfiguration();
+            services.AddHangfireConfiguration();
             services.AddSwaggerConfiguration();
             services.AddServicesConfiguration();
         }
@@ -29,6 +29,7 @@ namespace APS8_CSHARP_API
             app.UseRouting();
             app.UseCors("CorsPolicy");
             app.UseEndpoints(endpoints => endpoints.MapControllers());
+            app.UseHangfireConfiguration();
 
             app.Run(async (context) => await context.Response.WriteAsync("APS8 API no ar!"));
         }
