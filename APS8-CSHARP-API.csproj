@@ -8,8 +8,31 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Domain\NovaPasta1\**" />
+    <Compile Remove="Domain\NovaPasta\**" />
+    <Content Remove="Domain\NovaPasta1\**" />
+    <Content Remove="Domain\NovaPasta\**" />
+    <EmbeddedResource Remove="Domain\NovaPasta1\**" />
+    <EmbeddedResource Remove="Domain\NovaPasta\**" />
+    <None Remove="Domain\NovaPasta1\**" />
+    <None Remove="Domain\NovaPasta\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Hangfire" Version="1.8.6" />
+    <PackageReference Include="Hangfire.Dashboard.Basic.Authentication" Version="5.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.11" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.13">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.13" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Domain\NovaPasta2\" />
   </ItemGroup>
 
 </Project>
