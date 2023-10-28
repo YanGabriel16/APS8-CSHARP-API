@@ -19,9 +19,9 @@ namespace APS8_CSHARP_API.Domain.Entidades
         public string? Cidade { get; set; }
         public string? Estado { get; set; }
         public string? Pais { get; set; }
-        public virtual ICollection<LocalInformacoes>? Informacoes { get; set; }
+        public virtual ICollection<LocalInformacoes> Informacoes { get; set; }
 
         [NotMapped]
-        public LocalDadosObject? Dados { get; set; }
+        public List<LocalDadosObject> Dados { get; set; } = new();
     }
 }

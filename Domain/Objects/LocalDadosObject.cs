@@ -2,13 +2,13 @@ namespace APS8_CSHARP_API.Domain.Objects
 {
     public class LocalDadosObject
     {
-        public LocalDadosObject(List<AirQualityResponse> qualidadeAr, List<OpenWeatherResponse> climaticos)
+        public LocalDadosObject(AirQualityResponse qualidadeAr, OpenWeatherResponse clima)
         {
             this.QualidadeAr = qualidadeAr;
-            this.Climaticos = climaticos;
+            this.Clima = clima;
         }
 
-        public List<AirQualityResponse> QualidadeAr { get; set; }
-        public List<OpenWeatherResponse> Climaticos { get; set; }
+        public AirQualityResponse QualidadeAr { get; set; }
+        public OpenWeatherResponse Clima { get; set; }
     }
 }

@@ -18,6 +18,7 @@ namespace APS8_CSHARP_API
             services.AddHangfireConfiguration();
             services.AddSwaggerConfiguration();
             services.AddServicesConfiguration();
+            services.AddRepositoryConfiguration();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
