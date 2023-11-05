@@ -16,8 +16,25 @@ namespace APS8_CSHARP_API.Infra.Repository
         #region Consultas
         public async Task<List<Local>> GetLocaisAtivos()
         {
-            var query = await _context.Set<Local>().Where(x => x.Status == Status.Ativo).ToListAsync();
-            return query;
+            var query = await _context.Set<Local>().Where(x => x.Status == Status.Ativo).Include(x => x.Informacoes).ToListAsync();
+            if (query != null)
+            {
+                foreach (var local in query)
+                {
+                    foreach (var item in local.Informacoes)
+                    {
+                        var qualidadeAr = JsonConvert.DeserializeObject<AirQualityResponse>(item.QualidadeArJson, Constants.jsonSettings);
+                        var clima = JsonConvert.DeserializeObject<OpenWeatherResponse>(item.ClimaticosJson, Constants.jsonSettings);
+                        var dado = new LocalDadosObject(qualidadeAr ?? new AirQualityResponse(), clima ?? new OpenWeatherResponse());
+
+                        local.Dados.Add(dado);
+                    }
+
+                    local.Informacoes = new List<LocalInformacoes>();
+                }
+            }
+
+            return query ?? new();
         }
 
         public async Task<Local> GetLocal(int Id)

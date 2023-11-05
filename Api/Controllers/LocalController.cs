@@ -52,7 +52,13 @@ namespace APS8_CSHARP_API.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> AddLocal(AdicionarLocalRequest request)
         {
-            var novoLocal = new Local(request.Nome, request.Longitude, request.Latitude);
+            var novoLocal = new Local(request.Nome, request.Longitude, request.Latitude)
+            {
+                CEP =  request.CEP,
+                Cidade = request.Cidade,
+                Estado = request.Estado,
+                Pais = request.Pais
+            };
 
             _unitfOfWork.LocalRepository.Add(novoLocal);
             await _unitfOfWork.Commit();
