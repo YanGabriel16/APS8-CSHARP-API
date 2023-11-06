@@ -29,8 +29,6 @@ namespace APS8_CSHARP_API.Infra.Repository
 
                         local.Dados.Add(dado);
                     }
-
-                    local.LocalInformacoes = new List<LocalInformacoes>();
                 }
             }
 

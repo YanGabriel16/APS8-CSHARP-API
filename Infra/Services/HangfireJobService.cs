@@ -43,7 +43,9 @@ namespace APS8_CSHARP_API.Infra.Services
                         QualidadeArJson = JsonConvert.SerializeObject(qualidadeAr)
                     };
 
-                    _unitOfWork.LocalInformacoesRepository.Add(dado);
+                    local.LocalInformacoes.Add(dado);
+
+                    _unitOfWork.LocalRepository.Update(local);
                 }
 
                 await _unitOfWork.Commit();

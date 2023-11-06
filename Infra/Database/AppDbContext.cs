@@ -25,8 +25,7 @@ namespace APS8_CSHARP_API.Infra.Database
             modelBuilder.Entity<Local>()
                 .HasMany(l => l.LocalInformacoes)
                 .WithOne(li => li.Local)
-                .HasForeignKey(li => li.LocalId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .HasForeignKey(li => li.LocalId);
             
             modelBuilder.Entity<Local>()
                 .Property(p => p.Latitude)
