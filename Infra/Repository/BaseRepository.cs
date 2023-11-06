@@ -15,7 +15,10 @@ namespace APS8_CSHARP_API.Infra.Repository
         {
             _context.Set<T>().Add(entity);
         }
-
+        public void AddRange(List<T> entities)
+        {
+            _context.Set<T>().AddRange(entities);
+        }
         public void Update(T entity)
         {
             _context.Entry(entity).State = EntityState.Modified;

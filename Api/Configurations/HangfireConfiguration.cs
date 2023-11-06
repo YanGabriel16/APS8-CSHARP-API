@@ -31,7 +31,7 @@ namespace APS8_CSHARP_API.Api.Configurations
 
         private static void AddHangfireJobs(this IApplicationBuilder _)
         {
-            RecurringJob.AddOrUpdate<IHangfireJobService>("Job :: AdicionarDadosLocaisJob", x => x.AdicionarDadosLocaisJob(), CronExtensions.Minutely(30));
+            RecurringJob.AddOrUpdate<IHangfireJobService>("Job :: AdicionarDadosLocaisJob", x => x.AdicionarDadosLocaisJob(), Cron.Daily);
         }
     }
 }

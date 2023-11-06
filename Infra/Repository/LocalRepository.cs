@@ -16,12 +16,12 @@ namespace APS8_CSHARP_API.Infra.Repository
         #region Consultas
         public async Task<List<Local>> GetLocaisAtivos()
         {
-            var query = await _context.Set<Local>().Where(x => x.Status == Status.Ativo).Include(x => x.Informacoes).ToListAsync();
+            var query = await _context.Set<Local>().Where(x => x.Status == Status.Ativo).Include(x => x.LocalInformacoes).ToListAsync();
             if (query != null)
             {
                 foreach (var local in query)
                 {
-                    foreach (var item in local.Informacoes)
+                    foreach (var item in local.LocalInformacoes)
                     {
                         var qualidadeAr = JsonConvert.DeserializeObject<AirQualityResponse>(item.QualidadeArJson, Constants.jsonSettings);
                         var clima = JsonConvert.DeserializeObject<OpenWeatherResponse>(item.ClimaticosJson, Constants.jsonSettings);
@@ -30,7 +30,7 @@ namespace APS8_CSHARP_API.Infra.Repository
                         local.Dados.Add(dado);
                     }
 
-                    local.Informacoes = new List<LocalInformacoes>();
+                    local.LocalInformacoes = new List<LocalInformacoes>();
                 }
             }
 
@@ -41,12 +41,12 @@ namespace APS8_CSHARP_API.Infra.Repository
         {
             var query = await _context.Set<Local>()
                 .Where(x => x.Id == Id)
-                .Include(x => x.Informacoes)
+                .Include(x => x.LocalInformacoes)
                 .FirstOrDefaultAsync();
 
             if (query != null)
             {
-                foreach (var item in query.Informacoes)
+                foreach (var item in query.LocalInformacoes)
                 {
                     var qualidadeAr = JsonConvert.DeserializeObject<AirQualityResponse>(item.QualidadeArJson, Constants.jsonSettings);
                     var clima = JsonConvert.DeserializeObject<OpenWeatherResponse>(item.ClimaticosJson, Constants.jsonSettings);
@@ -55,7 +55,7 @@ namespace APS8_CSHARP_API.Infra.Repository
                     query.Dados.Add(dado);
                 }
 
-                query.Informacoes = new List<LocalInformacoes>();
+                query.LocalInformacoes = new List<LocalInformacoes>();
             }
 
             return query ?? new Local(string.Empty, 0, 0);
@@ -74,6 +74,12 @@ namespace APS8_CSHARP_API.Infra.Repository
                 return true;
             }
             return false;
+        }
+
+        public async Task<Local> GetLocal(decimal latitude, decimal longitude)
+        {
+            var local = await _context.Set<Local>().FirstAsync(x => x.Latitude == latitude && x.Longitude == longitude && x.Status == Status.Ativo);
+            return local ?? new Local(string.Empty, 0, 0);
         }
         #endregion
     }

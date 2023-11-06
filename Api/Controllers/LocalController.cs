@@ -4,6 +4,7 @@ using APS8_CSHARP_API.Domain.Interfaces;
 using APS8_CSHARP_API.Domain.Interfaces.Google;
 using APS8_CSHARP_API.Domain.Objects;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace APS8_CSHARP_API.Api.Controllers
 {
@@ -13,12 +14,12 @@ namespace APS8_CSHARP_API.Api.Controllers
     {
         private readonly IOpenWeatherService _openWeatherService;
         private readonly IAirQualityService _airQualityService;
-        private readonly IUnitOfWork _unitfOfWork;
+        private readonly IUnitOfWork _unitOfWork;
         public LocalController(IOpenWeatherService openWeatherService, IAirQualityService airQualityService, IUnitOfWork unitfOfWork)
         {
             _openWeatherService = openWeatherService;
             _airQualityService = airQualityService;
-            _unitfOfWork = unitfOfWork;
+            _unitOfWork = unitfOfWork;
         }
 
         [HttpGet("Forecast")]
@@ -38,14 +39,14 @@ namespace APS8_CSHARP_API.Api.Controllers
         [HttpGet("Local/{id}")]
         public async Task<Local> GetLocal(int id)
         {
-            var response = await _unitfOfWork.LocalRepository.GetLocal(id);
+            var response = await _unitOfWork.LocalRepository.GetLocal(id);
             return response;
         }
 
         [HttpGet("Locais")]
         public async Task<List<Local>> GetLocaisAtivos()
         {
-            var response = await _unitfOfWork.LocalRepository.GetLocaisAtivos();
+            var response = await _unitOfWork.LocalRepository.GetLocaisAtivos();
             return response;
         }
 
@@ -54,14 +55,28 @@ namespace APS8_CSHARP_API.Api.Controllers
         {
             var novoLocal = new Local(request.Nome, request.Longitude, request.Latitude)
             {
-                CEP =  request.CEP,
+                CEP = request.CEP,
                 Cidade = request.Cidade,
                 Estado = request.Estado,
                 Pais = request.Pais
             };
 
-            _unitfOfWork.LocalRepository.Add(novoLocal);
-            await _unitfOfWork.Commit();
+            _unitOfWork.LocalRepository.Add(novoLocal);
+            await _unitOfWork.Commit();
+
+            var local = await _unitOfWork.LocalRepository.GetLocal(request.Latitude, request.Longitude);
+
+            var clima = await _openWeatherService.GetWeatherForecast(local.Latitude, local.Longitude);
+            var qualidadeAr = await _airQualityService.GetQualidadeAr(local.Latitude, local.Longitude);
+            var dado = new LocalInformacoes()
+            {
+                LocalId = local.Id,
+                ClimaticosJson = JsonConvert.SerializeObject(clima),
+                QualidadeArJson = JsonConvert.SerializeObject(qualidadeAr)
+            };
+
+            _unitOfWork.LocalInformacoesRepository.Add(dado);
+            await _unitOfWork.Commit();
 
             return Ok();
         }
@@ -69,13 +84,13 @@ namespace APS8_CSHARP_API.Api.Controllers
         [HttpPost("{id}")]
         public async Task<IActionResult> UpdateLocal(int id, EditarLocalRequest request)
         {
-            var local = await _unitfOfWork.LocalRepository.GetLocal(id);
+            var local = await _unitOfWork.LocalRepository.GetLocal(id);
             if (local == null) return BadRequest();
 
             local.Nome = request.Nome;
 
-            _unitfOfWork.LocalRepository.Update(local);
-            await _unitfOfWork.Commit();
+            _unitOfWork.LocalRepository.Update(local);
+            await _unitOfWork.Commit();
 
             return Ok();
         }
@@ -83,8 +98,8 @@ namespace APS8_CSHARP_API.Api.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteLocal(int id)
         {
-            var result = await _unitfOfWork.LocalRepository.Delete(id);
-            await _unitfOfWork.Commit();
+            var result = await _unitOfWork.LocalRepository.Delete(id);
+            await _unitOfWork.Commit();
 
             if (result == false) return BadRequest();
 

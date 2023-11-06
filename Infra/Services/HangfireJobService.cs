@@ -1,7 +1,6 @@
 using APS8_CSHARP_API.Domain.Entidades;
 using APS8_CSHARP_API.Domain.Interfaces;
 using APS8_CSHARP_API.Domain.Interfaces.Google;
-using APS8_CSHARP_API.Domain.Interfaces.Repository;
 using Newtonsoft.Json;
 
 namespace APS8_CSHARP_API.Infra.Services
@@ -31,21 +30,32 @@ namespace APS8_CSHARP_API.Infra.Services
             if (locais.Count > 5)
                 locais = locais.Take(5).ToList();
 
-            foreach (var local in locais)
+            try
             {
-                var clima = await _openWeatherService.GetWeatherForecast(local.Latitude, local.Longitude);
-                var qualidadeAr = await _airQualityService.GetQualidadeAr(local.Latitude, local.Longitude);
-                var dado = new LocalInformacoes()
+                foreach (var local in locais)
                 {
-                    LocalId = local.Id,
-                    ClimaticosJson = JsonConvert.SerializeObject(clima),
-                    QualidadeArJson = JsonConvert.SerializeObject(qualidadeAr)
-                };
+                    var clima = await _openWeatherService.GetWeatherForecast(local.Latitude, local.Longitude);
+                    var qualidadeAr = await _airQualityService.GetQualidadeAr(local.Latitude, local.Longitude);
+                    var dado = new LocalInformacoes()
+                    {
+                        LocalId = local.Id,
+                        ClimaticosJson = JsonConvert.SerializeObject(clima),
+                        QualidadeArJson = JsonConvert.SerializeObject(qualidadeAr)
+                    };
 
-                _unitOfWork.LocalInformacoesRepository.Add(dado);
+                    _unitOfWork.LocalInformacoesRepository.Add(dado);
+                }
+
+                await _unitOfWork.Commit();
             }
-
-            await _unitOfWork.Commit();
+            catch (Exception ex)
+            {
+                Console.WriteLine("Erro ao adicionar/atualizar registros: " + ex.Message);
+                Console.WriteLine("--------------------------------------------------------------------------------------");
+                Console.WriteLine("Job :: AdicionarDadosLocaisJob => Não Concluido!");
+                Console.WriteLine("--------------------------------------------------------------------------------------");
+                return;
+            }
 
             Console.WriteLine("--------------------------------------------------------------------------------------");
             Console.WriteLine("Job :: AdicionarDadosLocaisJob => Concluido!");
