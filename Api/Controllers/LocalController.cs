@@ -46,7 +46,7 @@ namespace APS8_CSHARP_API.Api.Controllers
         [HttpGet("Locais")]
         public async Task<List<Local>> GetLocaisAtivos()
         {
-            var response = await _unitOfWork.LocalRepository.GetLocaisAtivos();
+            var response = await _unitOfWork.LocalRepository.GetLocaisAtivos(true);
             return response;
         }
 

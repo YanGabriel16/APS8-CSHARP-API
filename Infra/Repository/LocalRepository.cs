@@ -14,9 +14,13 @@ namespace APS8_CSHARP_API.Infra.Repository
         public LocalRepository(AppDbContext appDbContext) : base(appDbContext) { }
 
         #region Consultas
-        public async Task<List<Local>> GetLocaisAtivos()
+        public async Task<List<Local>> GetLocaisAtivos(bool limparLocalInformacoes = false)
         {
-            var query = await _context.Set<Local>().Where(x => x.Status == Status.Ativo).Include(x => x.LocalInformacoes).ToListAsync();
+            var query = await _context.Set<Local>()
+                .Where(x => x.Status == Status.Ativo)
+                .Include(x => x.LocalInformacoes)
+                .ToListAsync();
+
             if (query != null)
             {
                 foreach (var local in query)
@@ -25,10 +29,15 @@ namespace APS8_CSHARP_API.Infra.Repository
                     {
                         var qualidadeAr = JsonConvert.DeserializeObject<AirQualityResponse>(item.QualidadeArJson, Constants.jsonSettings);
                         var clima = JsonConvert.DeserializeObject<OpenWeatherResponse>(item.ClimaticosJson, Constants.jsonSettings);
-                        var dado = new LocalDadosObject(qualidadeAr ?? new AirQualityResponse(), clima ?? new OpenWeatherResponse());
+                        var dado = new LocalDadosObject(qualidadeAr ?? new AirQualityResponse(), clima ?? new OpenWeatherResponse(), item.DataAtualizado);
 
                         local.Dados.Add(dado);
                     }
+
+                    local.Dados = local.Dados.OrderByDescending(x => x.Data).ToList();
+
+                    if(limparLocalInformacoes == true)
+                        local.LocalInformacoes = new List<LocalInformacoes>();
                 }
             }
 
@@ -48,10 +57,12 @@ namespace APS8_CSHARP_API.Infra.Repository
                 {
                     var qualidadeAr = JsonConvert.DeserializeObject<AirQualityResponse>(item.QualidadeArJson, Constants.jsonSettings);
                     var clima = JsonConvert.DeserializeObject<OpenWeatherResponse>(item.ClimaticosJson, Constants.jsonSettings);
-                    var dado = new LocalDadosObject(qualidadeAr ?? new AirQualityResponse(), clima ?? new OpenWeatherResponse());
+                    var dado = new LocalDadosObject(qualidadeAr ?? new AirQualityResponse(), clima ?? new OpenWeatherResponse(), item.DataAtualizado);
 
                     query.Dados.Add(dado);
                 }
+
+                query.Dados = query.Dados.OrderByDescending(x => x.Data).ToList();
 
                 query.LocalInformacoes = new List<LocalInformacoes>();
             }
