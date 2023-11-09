@@ -35,6 +35,7 @@ namespace APS8_CSHARP_API.Infra.Repository
                     }
 
                     local.Dados = local.Dados.OrderByDescending(x => x.Data).ToList();
+                    local.Dados = local.Dados.Distinct(new LocalDadosObjectDateComparer()).ToList();
 
                     if(limparLocalInformacoes == true)
                         local.LocalInformacoes = new List<LocalInformacoes>();
@@ -63,6 +64,7 @@ namespace APS8_CSHARP_API.Infra.Repository
                 }
 
                 query.Dados = query.Dados.OrderByDescending(x => x.Data).ToList();
+                query.Dados = query.Dados.Distinct(new LocalDadosObjectDateComparer()).ToList();
 
                 query.LocalInformacoes = new List<LocalInformacoes>();
             }
