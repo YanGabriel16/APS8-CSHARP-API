@@ -2,10 +2,10 @@ namespace APS8_CSHARP_API.Domain.Objects
 {
     public class OpenWeatherResponse
     {
-        public string cod { get; set; }
-        public int message { get; set; }
-        public int cnt { get; set; }
-        public List<List> list { get; set; }
-        public City city { get; set; }
+        public string Cod { get; set; } = string.Empty;
+        public int Message { get; set; }
+        public int Cnt { get; set; }
+        public List<List>? List { get; set; }
+        public City? City { get; set; }
     }
 }

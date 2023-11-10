@@ -4,70 +4,70 @@ namespace APS8_CSHARP_API.Domain.Objects
 {
     public class Main
     {
-        public double temp { get; set; }
-        public double feels_like { get; set; }
-        public double temp_min { get; set; }
-        public double temp_max { get; set; }
-        public int pressure { get; set; }
-        public int sea_level { get; set; }
-        public int grnd_level { get; set; }
-        public int humidity { get; set; }
-        public double temp_kf { get; set; }
+        public double Temp { get; set; }
+        public double Feels_like { get; set; }
+        public double Temp_min { get; set; }
+        public double Temp_max { get; set; }
+        public decimal Pressure { get; set; }
+        public decimal Sea_level { get; set; }
+        public decimal Grnd_level { get; set; }
+        public decimal Humidity { get; set; }
+        public double Temp_kf { get; set; }
     }
 
     public class Weather
     {
-        public int id { get; set; }
-        public string main { get; set; }
-        public string description { get; set; }
-        public string icon { get; set; }
+        public decimal Id { get; set; }
+        public string Main { get; set; } = string.Empty;
+        public string Description { get; set; } = string.Empty;
+        public string Icon { get; set; } = string.Empty;
     }
 
     public class Clouds
     {
-        public int all { get; set; }
+        public decimal All { get; set; }
     }
 
     public class Wind
     {
-        public double speed { get; set; }
-        public int deg { get; set; }
-        public double gust { get; set; }
+        public double Speed { get; set; }
+        public decimal Deg { get; set; }
+        public double Gust { get; set; }
     }
 
     public class Sys
     {
-        public string pod { get; set; }
+        public string Pod { get; set; } = string.Empty;
     }
 
     public class List
     {
-        public int dt { get; set; }
-        public Main main { get; set; }
-        public List<Weather> weather { get; set; }
-        public Clouds clouds { get; set; }
-        public Wind wind { get; set; }
-        public int visibility { get; set; }
-        public int pop { get; set; }
-        public Sys sys { get; set; }
-        public string dt_txt { get; set; }
+        public decimal Dt { get; set; }
+        public Main Main { get; set; } = new();
+        public List<Weather> Weather { get; set; } = new();
+        public Clouds Clouds { get; set; } = new();
+        public Wind Wind { get; set; } = new();
+        public decimal Visibility { get; set; }
+        public decimal Pop { get; set; }
+        public Sys Sys { get; set; } = new();
+        public string Dt_txt { get; set; } = string.Empty;
     }
 
     public class City
     {
-        public int id { get; set; }
-        public string name { get; set; }
-        public Coord coord { get; set; }
-        public string country { get; set; }
-        public int population { get; set; }
-        public int timezone { get; set; }
-        public int sunrise { get; set; }
-        public int sunset { get; set; }
+        public decimal Id { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public Coord Coord { get; set; } = new();
+        public string Country { get; set; } = string.Empty;
+        public decimal Population { get; set; }
+        public decimal Timezone { get; set; }
+        public decimal Sunrise { get; set; }
+        public decimal Sunset { get; set; }
     }
 
     public class Coord
     {
-        public double lat { get; set; }
-        public double lon { get; set; }
+        public double Lat { get; set; }
+        public double Lon { get; set; }
     }
 }
