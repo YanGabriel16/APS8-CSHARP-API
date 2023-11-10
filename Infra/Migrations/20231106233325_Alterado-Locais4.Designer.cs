@@ -4,6 +4,7 @@ using APS8_CSHARP_API.Infra.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace APS8_CSHARP_API.Infra.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231106233325_Alterado-Locais4")]
+    partial class AlteradoLocais4
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -84,7 +87,8 @@ namespace APS8_CSHARP_API.Infra.Migrations
                     b.Property<DateTime>("DataCriado")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("LocalId")
+                    b.Property<int?>("LocalId")
+                        .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<string>("QualidadeArJson")
@@ -106,7 +110,7 @@ namespace APS8_CSHARP_API.Infra.Migrations
                     b.HasOne("APS8_CSHARP_API.Domain.Entidades.Local", "Local")
                         .WithMany("LocalInformacoes")
                         .HasForeignKey("LocalId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Local");
