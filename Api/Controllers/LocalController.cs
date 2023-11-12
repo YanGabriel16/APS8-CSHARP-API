@@ -1,5 +1,7 @@
+using System.Text.RegularExpressions;
 using APS8_CSHARP_API.Api.Requests;
 using APS8_CSHARP_API.Domain.Entidades;
+using APS8_CSHARP_API.Domain.Helpers;
 using APS8_CSHARP_API.Domain.Interfaces;
 using APS8_CSHARP_API.Domain.Interfaces.Google;
 using APS8_CSHARP_API.Domain.Objects;
@@ -10,15 +12,17 @@ namespace APS8_CSHARP_API.Api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class LocalController : ControllerBase
+    public partial class LocalController : ControllerBase
     {
         private readonly IOpenWeatherService _openWeatherService;
         private readonly IAirQualityService _airQualityService;
+        private readonly IViaCEPService _viaCEPService;
         private readonly IUnitOfWork _unitOfWork;
-        public LocalController(IOpenWeatherService openWeatherService, IAirQualityService airQualityService, IUnitOfWork unitfOfWork)
+        public LocalController(IOpenWeatherService openWeatherService, IAirQualityService airQualityService, IViaCEPService viaCEPService, IUnitOfWork unitfOfWork)
         {
             _openWeatherService = openWeatherService;
             _airQualityService = airQualityService;
+            _viaCEPService = viaCEPService;
             _unitOfWork = unitfOfWork;
         }
 
@@ -27,6 +31,16 @@ namespace APS8_CSHARP_API.Api.Controllers
         {
             var response = await _openWeatherService.GetWeatherForecast(latitude, longitude);
             return response;
+        }
+
+        [HttpGet("consulta/cep/{cep}")]
+        public async Task<IActionResult> GetEnderecoPorCEP(string cep)
+        {
+            cep = RegexHelper.GetNumberRegex().Replace(cep, "");
+            var response = await _viaCEPService.GetEndereco(cep);
+
+            if (response == null) return BadRequest();
+            return Ok(response);
         }
 
         [HttpGet("QualidadeAr")]

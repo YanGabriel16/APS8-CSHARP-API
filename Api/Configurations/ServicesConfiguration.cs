@@ -13,6 +13,8 @@ namespace APS8_CSHARP_API.Configurations
             services.AddScoped<IAirQualityService, AirQualityService>();
             services.AddScoped<IHangfireJobService, HangfireJobService>();
             services.AddScoped<IOpenWeatherService, OpenWeatherService>();
+            services.AddScoped<IViaCEPService, ViaCEPService>();
+            services.AddScoped<IGeoCodeService, GeoCodeService>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
         }
     }
