@@ -10,7 +10,6 @@ namespace APS8_CSHARP_API.Configurations
     {
         public static void AddServicesConfiguration(this IServiceCollection services)
         {
-            services.AddScoped<IAirQualityService, AirQualityService>();
             services.AddScoped<IHangfireJobService, HangfireJobService>();
             services.AddScoped<IOpenWeatherService, OpenWeatherService>();
             services.AddScoped<IViaCEPService, ViaCEPService>();

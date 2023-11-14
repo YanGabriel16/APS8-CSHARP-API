@@ -14,31 +14,32 @@ namespace APS8_CSHARP_API.Infra.Repository
         public LocalRepository(AppDbContext appDbContext) : base(appDbContext) { }
 
         #region Consultas
-        public async Task<List<Local>> GetLocaisAtivos(bool limparLocalInformacoes = false)
+        public async Task<List<Local>> GetLocaisAtivos()
         {
             var query = await _context.Set<Local>()
                 .Where(x => x.Status == Status.Ativo)
-                .Include(x => x.LocalInformacoes)
                 .ToListAsync();
+
 
             if (query != null)
             {
+                var queryLocalInformacoes = await _context.Set<LocalInformacoes>()
+                    .Where(x => x.Status == Status.Ativo)
+                    .ToListAsync();
+
                 foreach (var local in query)
                 {
-                    foreach (var item in local.LocalInformacoes)
+                    var localInformacoes = queryLocalInformacoes.Where(x => x.LocalId == local.Id);
+                    foreach (var item in localInformacoes)
                     {
-                        var qualidadeAr = JsonConvert.DeserializeObject<AirQualityResponse>(item.QualidadeArJson, Constants.jsonSettings);
                         var clima = JsonConvert.DeserializeObject<OpenWeatherResponse>(item.ClimaticosJson, Constants.jsonSettings);
-                        var dado = new LocalDadosObject(qualidadeAr ?? new AirQualityResponse(), clima ?? new OpenWeatherResponse(), item.DataAtualizado);
+                        var dado = new LocalDadosObject(clima ?? new OpenWeatherResponse(), item.DataAtualizado);
 
                         local.Dados.Add(dado);
                     }
 
                     local.Dados = local.Dados.OrderByDescending(x => x.Data).ToList();
                     local.Dados = local.Dados.Distinct(new LocalDadosObjectDateComparer()).ToList();
-
-                    if(limparLocalInformacoes == true)
-                        local.LocalInformacoes = new List<LocalInformacoes>();
                 }
             }
 
@@ -49,24 +50,24 @@ namespace APS8_CSHARP_API.Infra.Repository
         {
             var query = await _context.Set<Local>()
                 .Where(x => x.Id == Id)
-                .Include(x => x.LocalInformacoes)
                 .FirstOrDefaultAsync();
 
             if (query != null)
             {
-                foreach (var item in query.LocalInformacoes)
+                var queryLocalInformacoes = await _context.Set<LocalInformacoes>()
+                    .Where(x => x.Status == Status.Ativo && x.LocalId == query.Id)
+                    .ToListAsync();
+
+                foreach (var item in queryLocalInformacoes)
                 {
-                    var qualidadeAr = JsonConvert.DeserializeObject<AirQualityResponse>(item.QualidadeArJson, Constants.jsonSettings);
                     var clima = JsonConvert.DeserializeObject<OpenWeatherResponse>(item.ClimaticosJson, Constants.jsonSettings);
-                    var dado = new LocalDadosObject(qualidadeAr ?? new AirQualityResponse(), clima ?? new OpenWeatherResponse(), item.DataAtualizado);
+                    var dado = new LocalDadosObject(clima ?? new OpenWeatherResponse(), item.DataAtualizado);
 
                     query.Dados.Add(dado);
                 }
 
                 query.Dados = query.Dados.OrderByDescending(x => x.Data).ToList();
                 query.Dados = query.Dados.Distinct(new LocalDadosObjectDateComparer()).ToList();
-
-                query.LocalInformacoes = new List<LocalInformacoes>();
             }
 
             return query ?? new Local(string.Empty, 0, 0);

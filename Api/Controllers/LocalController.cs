@@ -15,13 +15,11 @@ namespace APS8_CSHARP_API.Api.Controllers
     public partial class LocalController : ControllerBase
     {
         private readonly IOpenWeatherService _openWeatherService;
-        private readonly IAirQualityService _airQualityService;
         private readonly IViaCEPService _viaCEPService;
         private readonly IUnitOfWork _unitOfWork;
-        public LocalController(IOpenWeatherService openWeatherService, IAirQualityService airQualityService, IViaCEPService viaCEPService, IUnitOfWork unitfOfWork)
+        public LocalController(IOpenWeatherService openWeatherService, IViaCEPService viaCEPService, IUnitOfWork unitfOfWork)
         {
             _openWeatherService = openWeatherService;
-            _airQualityService = airQualityService;
             _viaCEPService = viaCEPService;
             _unitOfWork = unitfOfWork;
         }
@@ -43,13 +41,6 @@ namespace APS8_CSHARP_API.Api.Controllers
             return Ok(response);
         }
 
-        [HttpGet("QualidadeAr")]
-        public async Task<AirQualityResponse> GetQualidadeArAsync(decimal latitude, decimal longitude)
-        {
-            var response = await _airQualityService.GetQualidadeAr(latitude, longitude);
-            return response;
-        }
-
         [HttpGet("Local/{id}")]
         public async Task<Local> GetLocal(int id)
         {
@@ -60,7 +51,7 @@ namespace APS8_CSHARP_API.Api.Controllers
         [HttpGet("Locais")]
         public async Task<List<Local>> GetLocaisAtivos()
         {
-            var response = await _unitOfWork.LocalRepository.GetLocaisAtivos(true);
+            var response = await _unitOfWork.LocalRepository.GetLocaisAtivos();
             return response;
         }
 
@@ -81,12 +72,10 @@ namespace APS8_CSHARP_API.Api.Controllers
             var local = await _unitOfWork.LocalRepository.GetLocal(request.Latitude, request.Longitude);
 
             var clima = await _openWeatherService.GetWeatherForecast(local.Latitude, local.Longitude);
-            var qualidadeAr = await _airQualityService.GetQualidadeAr(local.Latitude, local.Longitude);
             var dado = new LocalInformacoes()
             {
                 LocalId = local.Id,
                 ClimaticosJson = JsonConvert.SerializeObject(clima),
-                QualidadeArJson = JsonConvert.SerializeObject(qualidadeAr)
             };
 
             _unitOfWork.LocalInformacoesRepository.Add(dado);
