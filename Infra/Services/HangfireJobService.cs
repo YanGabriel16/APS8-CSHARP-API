@@ -9,15 +9,12 @@ namespace APS8_CSHARP_API.Infra.Services
     public class HangfireJobService : IHangfireJobService
     {
         private readonly IOpenWeatherService _openWeatherService;
-        private readonly IAirQualityService _airQualityService;
         private readonly IUnitOfWork _unitOfWork;
         public HangfireJobService(
             IOpenWeatherService openWeatherService,
-            IAirQualityService airQualityService,
             IUnitOfWork unitOfWork)
         {
             _openWeatherService = openWeatherService;
-            _airQualityService = airQualityService;
             _unitOfWork = unitOfWork;
         }
 
@@ -39,19 +36,13 @@ namespace APS8_CSHARP_API.Infra.Services
                 foreach (var local in locais)
                 {
                     var clima = await _openWeatherService.GetWeatherForecast(local.Latitude, local.Longitude);
-                    var qualidadeAr = await _airQualityService.GetQualidadeAr(local.Latitude, local.Longitude);
                     var dado = new LocalInformacoes()
                     {
                         LocalId = local.Id,
                         ClimaticosJson = JsonConvert.SerializeObject(clima),
-                        QualidadeArJson = JsonConvert.SerializeObject(qualidadeAr)
                     };
 
-                    local.LocalInformacoes.Add(dado);
-
-                    local.LocalInformacoes = local.LocalInformacoes.Distinct(new LocalInformacoesDateComparer()).ToList();
-
-                    _unitOfWork.LocalRepository.Update(local);
+                    _unitOfWork.LocalInformacoesRepository.Add(dado);
                 }
 
                 await _unitOfWork.Commit();
