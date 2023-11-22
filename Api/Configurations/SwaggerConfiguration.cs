@@ -1,5 +1,3 @@
-
-
 using Microsoft.OpenApi.Models;
 
 namespace APS8_CSHARP_API.Configurations

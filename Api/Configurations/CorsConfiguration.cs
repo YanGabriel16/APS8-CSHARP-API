@@ -1,5 +1,3 @@
-
-
 namespace APS8_CSHARP_API.Configurations
 {
     public static class CorsConfiguration

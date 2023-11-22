@@ -1,7 +1,5 @@
 using APS8_CSHARP_API.Domain.Entidades;
-using APS8_CSHARP_API.Domain.Helpers;
 using APS8_CSHARP_API.Domain.Interfaces;
-using APS8_CSHARP_API.Domain.Interfaces.Google;
 using Newtonsoft.Json;
 
 namespace APS8_CSHARP_API.Infra.Services
@@ -26,10 +24,6 @@ namespace APS8_CSHARP_API.Infra.Services
             var locais = await _unitOfWork.LocalRepository.GetLocaisAtivos();
 
             if (!locais.Any()) return;
-            // if (true) return; //TODO: para nao consumir requisicoes
-
-            if (locais.Count > 5)
-                locais = locais.Take(5).ToList();
 
             try
             {
